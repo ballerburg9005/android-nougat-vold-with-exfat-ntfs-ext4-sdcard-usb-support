@@ -34,10 +34,12 @@ cp ANDROID/out/target/product/generic_arm64/system/bin/vold $thisrepo/binaries/b
 adb push $thisrepo/binaries/ /sdcard/
 adb shell
 su
+mount -o rw,remount /system 
 cp /sdcard/binaries/bin/* /system/bin/
 cp /sdcard/binaries/lib64/* /system/bin/
 mv /system/bin/vold /system/bin/vold_bkup
 chmod 755 /system/bin/vold /system/bin/fsck.exfat /system/bin/fsck.ntfs /system/bin/mkfs.exfat /system/bin/mkfs.ntfs /system/bin/mount.exfat /system/bin/mount.ntfs
+ mount -o ro,remount /system # important to remount ro, or else vold might damage your system partition!
 ```
 
 # testing the new vold
