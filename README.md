@@ -6,6 +6,48 @@ When you insert an SD card or USB storage via OTG that is not formatted FAT32, t
 
 Diagram of removable media mounting on Android: [SD CARD or USB Harddrive] -> Vold -> FUSE binary -> Kernel
 
-Like you can see, there are two points of failure: Vold and FUSE binaries. We already know that vold totally sucks, so the only way to change this is to recompile vold from Android source (see "compiling vold"). If you are using Android 7 or 8 with ARM64, then use the binaries from this repo for version 7 and for version 8 use https://github.com/null4n/vold-posix .
+Like you can see, there are two points of failure: Vold and FUSE binaries. We already know that vold totally sucks, so the only way to change this is to recompile vold from Android source (see "compiling vold"). If you are using Android 7 or 8 with ARM64, then use the binary from this repo for version 7 and for version 8 use https://github.com/null4n/vold-posix . The same goes for FUSE binaries, which are available in the "system" folder.
 
-TBC
+# compiling vold
+
+Beware that the download takes several hours, but the compilation is actually very easy and done in a few minutes.
+
+```
+# List of Android branches: 
+mkdir ANDROID; cd ANDROID
+# you need about 30GB disk space
+repo init  --depth=1 -u https://android.googlesource.com/platform/manifest -b android-7.0.0_r31
+repo sync -c -j8
+source build/envsetup.sh
+# choose aosp_arm64-eng - besides architecture, those flavors are meant for vendors to adapt to their product
+lunch
+mv system/vold system/vold_original
+cp $thisrepo/vold_src system/vold 
+cd system/vold
+mma
+cp ANDROID/out/target/product/generic_arm64/system/bin/vold $thisrepo/binaries/bin/
+```
+
+# installing vold and the other binaries
+
+```
+adb push $thisrepo/binaries/ /sdcard/
+adb shell
+su
+cp /sdcard/binaries/bin/* /system/bin/
+cp /sdcard/binaries/lib64/* /system/bin/
+mv /system/bin/vold /system/bin/vold_bkup
+chmod 755 /system/bin/vold /system/bin/fsck.exfat /system/bin/fsck.ntfs /system/bin/mkfs.exfat /system/bin/mkfs.ntfs /system/bin/mount.exfat /system/bin/mount.ntfs
+```
+
+# testing the new vold
+```
+# vold launch command, only needs you to add whitespaces
+cat /proc/`ps | grep vold | sed -E "s#^[^[:space:]]+[[:space:]]+([^[:space:]]+).*#\1#g"`/cmdline
+# killall vold
+echo "use above cmdline here"
+sleep 5
+ps | grep vold
+echo "if you don't see that vold is still running, you need to check why with adb logcat and recompile it"
+echo "without vold working, Android will not boot and you need to fix phone with TWRP or fastboot & stock image!"
+```
