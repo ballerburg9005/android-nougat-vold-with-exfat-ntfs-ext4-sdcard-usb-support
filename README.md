@@ -19,16 +19,16 @@ mkdir ANDROID; cd ANDROID
 repo init  --depth=1 -u https://android.googlesource.com/platform/manifest -b android-7.0.0_r31
 repo sync -c -j8
 source build/envsetup.sh
-# choose aosp_arm64-eng - besides architecture, those flavors are meant for vendors to adapt to their product
 lunch
+# pick aosp_arm64-eng - besides architecture, those flavors are meant for vendors to adapt to their product
 mv system/vold system/vold_original
 cp $thisrepo/vold_src system/vold 
 cd system/vold
-mma
+mma # compile command
 cp ANDROID/out/target/product/generic_arm64/system/bin/vold $thisrepo/binaries/bin/
 ```
 
-# installing vold and the other binaries
+# installing vold and the other binaries it wants
 
 ```
 adb push $thisrepo/binaries/ /sdcard/
