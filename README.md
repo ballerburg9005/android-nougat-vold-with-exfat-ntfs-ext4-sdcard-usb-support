@@ -32,7 +32,7 @@ source build/envsetup.sh && lunch
 # pick aosp_arm64-eng - besides architecture, those flavors are meant for vendors to adapt to their product
 # for me there was a bug, so that when I selected #3 it was actually #2 ...
 mv system/vold system/vold_original
-cp $thisrepo/vold_src system/vold 
+cp $thisrepo/vold system/vold 
 cd system/vold
 mma # compile command
 cp ANDROID/out/target/product/generic_arm64/system/bin/vold $thisrepo/binaries/bin/
