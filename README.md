@@ -14,9 +14,9 @@ Like you can see, there are two points of failure: Vold and FUSE binaries. We al
 
 ## summary
 
-Android = 7: This repo
-Android = 8: https://github.com/null4n/vold-posix
-Android > 8: If exFAT does not already work, use binaries from this repo but not vold binary (only exFAT will work).
+* Android = 7: This repo
+* Android = 8: https://github.com/null4n/vold-posix
+* Android > 8: If exFAT does not already work, use binaries from this repo but not vold binary (only exFAT will work).
 
 ## compiling vold
 
