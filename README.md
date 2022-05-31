@@ -1,4 +1,8 @@
-# about
+# ❌broken abandoned project❌
+
+I guess this approach will not work for a lot of people because vold itself is a piece of shit so that it might require lots of mysterious changes by custom vendor code. I copied this code from stock Android and I had to do a couple of fixes, in places in which my vendor vold binary would dump the same ignored error messages and on top extra debug messages not part of stock code. So end of story is that stock vold is so crappy and broken by design that without having source code of adapted vendor vold it is hardly feasible to get something viable going.
+
+## about
 
 Chances are you found this repo, because you need to have a storage medium with large file support, but your Android version is not Nougat (v8). In this case the following explanation will still be helpful to understand what is going on in Android in the background and to decide how to proceed best.
 
@@ -8,7 +12,13 @@ Diagram of removable media mounting on Android: [SD CARD or USB Harddrive] -> Vo
 
 Like you can see, there are two points of failure: Vold and FUSE binaries. We already know that vold totally sucks, so the only way to change this is to recompile vold from Android source (see "compiling vold"). If you are using Android 7 or 8 with ARM64, then use the binary from this repo for version 7 and for version 8 use https://github.com/null4n/vold-posix . The same goes for FUSE binaries, which are available in the "system" folder.
 
-# compiling vold
+## summary
+
+Android = 7: This repo
+Android = 8: https://github.com/null4n/vold-posix
+Android > 8: If exFAT does not already work, use binaries from this repo but not vold binary (only exFAT will work).
+
+## compiling vold
 
 Beware that the download takes several hours, but the compilation is actually very easy and done in a few minutes.
 
@@ -28,21 +38,22 @@ mma # compile command
 cp ANDROID/out/target/product/generic_arm64/system/bin/vold $thisrepo/binaries/bin/
 ```
 
-# installing vold and the other binaries it wants
+## installing vold and the other binaries it wants
 
 ```
 adb push $thisrepo/binaries/ /sdcard/
 adb shell
 su
+# it is best to perform this from recovery, or instantaneously. I actually had my system partition damaged by leaving it rw for too long.
 mount -o rw,remount /system 
 cp /sdcard/binaries/bin/* /system/bin/
 cp /sdcard/binaries/lib64/* /system/bin/
 mv /system/bin/vold /system/bin/vold_bkup
 chmod 755 /system/bin/vold /system/bin/fsck.exfat /system/bin/fsck.ntfs /system/bin/mkfs.exfat /system/bin/mkfs.ntfs /system/bin/mount.exfat /system/bin/mount.ntfs
- mount -o ro,remount /system # important to remount ro, or else vold might damage your system partition!
+ mount -o ro,remount /system
 ```
 
-# testing the new vold
+## testing the new vold
 ```
 # vold launch command, only needs you to add whitespaces
 cat /proc/`ps | grep vold | sed -E "s#^[^[:space:]]+[[:space:]]+([^[:space:]]+).*#\1#g"`/cmdline | tr '\000' ' '
@@ -54,7 +65,7 @@ echo "if you don't see that vold is still running, you need to check why with ad
 echo "without vold working, Android will not boot and you need to fix phone with TWRP or fastboot & stock image!"
 ```
 
-# working out issues
+## more debugging
 ```
 # Once vold is gone, you can't push via adb to fix:
 setenforce 0
@@ -63,7 +74,8 @@ mount /dev/block/mmcblk1p1 /sdcard/ -o umask=0000
 # The last I got was :
 # 05-31 16:19:24.721  6877  6877 E SocketListener: Obtaining file descriptor socket 'vold' failed: No such file or directory
 # 05-31 16:19:24.721  6877  6877 E vold_bkup: Unable to start CommandListener: No such file or directory
-# which I would also get with original vold
+# which I would also get with original vold, which would no longer function after I ran my vold
+
 # then I forgot to mount ro, tried to copy vold_backup back but system partition was broken so I flashed it again
 # then installed vold again without testing
 # then rebooted
