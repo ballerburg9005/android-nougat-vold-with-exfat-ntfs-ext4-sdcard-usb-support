@@ -46,9 +46,9 @@ adb shell
 su
 # it is best to perform this from recovery, or instantaneously. I actually had my system partition damaged by leaving it rw for too long.
 mount -o rw,remount /system 
+mv /system/bin/vold /system/bin/vold_bkup
 cp /sdcard/binaries/bin/* /system/bin/
 cp /sdcard/binaries/lib64/* /system/bin/
-mv /system/bin/vold /system/bin/vold_bkup
 chmod 755 /system/bin/vold /system/bin/fsck.exfat /system/bin/fsck.ntfs /system/bin/mkfs.exfat /system/bin/mkfs.ntfs /system/bin/mount.exfat /system/bin/mount.ntfs
  mount -o ro,remount /system
 ```
