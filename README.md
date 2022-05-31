@@ -2,7 +2,9 @@
 
 I guess this approach will not work for a lot of people because vold itself is a piece of shit so that it might require lots of mysterious changes by custom vendor code. I copied this code from stock Android and I had to do a couple of fixes, in places in which my vendor vold binary would dump the same ignored error messages and on top extra debug messages not part of stock code. So end of story is that stock vold is so crappy and broken by design that without having source code of adapted vendor vold it is hardly feasible to get something viable going.
 
-## about
+## about 
+
+* requires root
 
 Chances are you found this repo, because you need to have a storage medium with large file support, but your Android version is not Nougat (v8). In this case the following explanation will still be helpful to understand what is going on in Android in the background and to decide how to proceed best.
 
@@ -10,13 +12,23 @@ When you insert an SD card or USB storage via OTG that is not formatted FAT32, t
 
 Diagram of removable media mounting on Android: [SD CARD or USB Harddrive] -> Vold -> FUSE binary -> Kernel
 
-Like you can see, there are two points of failure: Vold and FUSE binaries. We already know that vold totally sucks, so the only way to change this is to recompile vold from Android source (see "compiling vold"). If you are using Android 7 or 8 with ARM64, then use the binary from this repo for version 7 and for version 8 use https://github.com/null4n/vold-posix . The same goes for FUSE binaries, which are available in the "system" folder.
+Like you can see, there are two points of failure: Vold and FUSE binaries. We already know that vold totally sucks, so the only way to change this is to recompile vold from Android source (see "compiling vold"). If you are using Android 7 or 8 with ARM64, then use the binary from this repo for version 7 and for version 8 use https://github.com/null4n/vold-posix . The same goes for FUSE binaries, which are available in the "system" folder. You can also do some kind of hack using bash scripts... which I recommend you rather try than this. 
 
 ## summary
+
+**Do bash script hack, don't do this approach.**
+
+This approach:
 
 * Android = 7: This repo
 * Android = 8: https://github.com/null4n/vold-posix
 * Android > 8: If exFAT does not already work, use binaries from this repo but not vold binary (only exFAT will work).
+
+Other approaches:
+
+* ❌ Using apps from Google Play (many issues: cost money, people report corrupted filesystems, work either not on SD card or require root but are bugged abandonware)
+* ❌ [sdcardfs.ko patch](https://forum.xda-developers.com/t/ntfs-on-your-android-with-full-read-write-support.2920856/) (I believe this is an approach that stopped working in Android 7, plus the last 10 years tons of phones now ship without loadable module support)
+* ❌ [NtfsMounter.apk](https://forum.xda-developers.com/t/app-ntfs-mounter-automatically-mount-ntfs-ext-formated-usb-sticks-and-sd-cards.1654024/) reported to work on Android 9, but then doesn't work for me
 
 ## compiling vold
 
