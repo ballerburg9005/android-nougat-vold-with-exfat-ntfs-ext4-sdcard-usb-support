@@ -46,10 +46,26 @@ chmod 755 /system/bin/vold /system/bin/fsck.exfat /system/bin/fsck.ntfs /system/
 ```
 # vold launch command, only needs you to add whitespaces
 cat /proc/`ps | grep vold | sed -E "s#^[^[:space:]]+[[:space:]]+([^[:space:]]+).*#\1#g"`/cmdline | tr '\000' ' '
-# killall vold
+killall vold
 echo "use above cmdline here"
 sleep 5
 ps | grep vold
 echo "if you don't see that vold is still running, you need to check why with adb logcat and recompile it"
 echo "without vold working, Android will not boot and you need to fix phone with TWRP or fastboot & stock image!"
+```
+
+# working out issues
+```
+# Once vold is gone, you can't push via adb to fix:
+setenforce 0
+mount /dev/block/mmcblk1p1 /sdcard/ -o umask=0000
+
+# The last I got was :
+# 05-31 16:19:24.721  6877  6877 E SocketListener: Obtaining file descriptor socket 'vold' failed: No such file or directory
+# 05-31 16:19:24.721  6877  6877 E vold_bkup: Unable to start CommandListener: No such file or directory
+# which I would also get with original vold
+# then I forgot to mount ro, tried to copy vold_backup back but system partition was broken so I flashed it again
+# then installed vold again without testing
+# then rebooted
+
 ```
