@@ -45,7 +45,7 @@ chmod 755 /system/bin/vold /system/bin/fsck.exfat /system/bin/fsck.ntfs /system/
 # testing the new vold
 ```
 # vold launch command, only needs you to add whitespaces
-cat /proc/`ps | grep vold | sed -E "s#^[^[:space:]]+[[:space:]]+([^[:space:]]+).*#\1#g"`/cmdline
+cat /proc/`ps | grep vold | sed -E "s#^[^[:space:]]+[[:space:]]+([^[:space:]]+).*#\1#g"`/cmdline | tr '\000' ' '
 # killall vold
 echo "use above cmdline here"
 sleep 5
