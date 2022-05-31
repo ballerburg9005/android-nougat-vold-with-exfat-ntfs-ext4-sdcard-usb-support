@@ -18,9 +18,9 @@ mkdir ANDROID; cd ANDROID
 # you need about 30GB disk space
 repo init  --depth=1 -u https://android.googlesource.com/platform/manifest -b android-7.0.0_r31
 repo sync -c -j8
-source build/envsetup.sh
-lunch
+source build/envsetup.sh && lunch
 # pick aosp_arm64-eng - besides architecture, those flavors are meant for vendors to adapt to their product
+# for me there was a bug, so that when I selected #3 it was actually #2 ...
 mv system/vold system/vold_original
 cp $thisrepo/vold_src system/vold 
 cd system/vold
