@@ -67,5 +67,5 @@ mount /dev/block/mmcblk1p1 /sdcard/ -o umask=0000
 # then I forgot to mount ro, tried to copy vold_backup back but system partition was broken so I flashed it again
 # then installed vold again without testing
 # then rebooted
-
+# then I gave up!
 ```
