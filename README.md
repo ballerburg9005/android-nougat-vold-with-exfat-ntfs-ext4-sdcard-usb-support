@@ -16,7 +16,7 @@ Like you can see, there are two points of failure: Vold and FUSE binaries. We al
 
 ## summary
 
-**Do bash script hack, don't do this approach.**
+**Do [bash script hack](https://github.com/ballerburg9005/android-nougat-vold-with-exfat-ntfs-ext4-sdcard-usb-support), don't do this approach.**
 
 This approach:
 
