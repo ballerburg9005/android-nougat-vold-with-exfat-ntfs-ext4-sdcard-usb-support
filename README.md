@@ -29,6 +29,7 @@ Other approaches:
 * ❌ Using apps from Google Play (many issues: cost money, people report corrupted filesystems, work either not on SD card or require root but are bugged abandonware. Problem is DIY implementation of FS in userspace = bad.)
 * ❌ [sdcardfs.ko patch](https://forum.xda-developers.com/t/ntfs-on-your-android-with-full-read-write-support.2920856/) (I believe this is an approach that stopped working in Android 7, plus the last 10 years tons of phones now ship without loadable module support)
 * ❌ [NtfsMounter.apk](https://forum.xda-developers.com/t/app-ntfs-mounter-automatically-mount-ntfs-ext-formated-usb-sticks-and-sd-cards.1654024/) can't deal with post Android 6 permissions, then just segfaults when you use workarounds: hopeless
+* ✅ [bash script hack](https://github.com/ballerburg9005/android-nougat-vold-with-exfat-ntfs-ext4-sdcard-usb-support) it sucks, but at least it works
 
 ## compiling vold
 
